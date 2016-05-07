@@ -1,0 +1,16 @@
+---
+  - name: Ensure MariaDB repos is present
+    apt_repository: repo='deb [arch=amd64,i386] http://mirror.one.com/mariadb/repo/10.1/ubuntu trusty main' state=present
+  
+  - name: Ensure MariaDB apt keys are present
+    apt_key: keyserver=keyserver.ubuntu.com id=1BB943DB
+    
+  - name: Install mariadb
+    apt: name={{item}} state=present force=yes
+    with_items:
+      - mariadb-server
+      - python-mysqldb
+      
+  - name: insert configuration template
+    template: src=mariadb.cnf.j2 dest=/etc/mysql/conf.d/mariadb.cnf owner=root group=root mode="u=rw,g=r,o=r"
+    notify: mariadb_reload

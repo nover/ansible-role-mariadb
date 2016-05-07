@@ -1,0 +1,20 @@
+galaxy_info:
+  author: Nicklas Laine Overgaard
+  description: MariaDB 10.1 role for Ubuntu Trusty
+  company: SKARP ApS
+  
+  license: GitHub The Unlicense
+  
+  min_ansible_version: 1.9
+
+  platforms:
+  
+  - name: Ubuntu
+    versions:
+    - trusty
+  
+  galaxy_tags:
+    - mariadb
+    - mysql
+    
+dependencies: []

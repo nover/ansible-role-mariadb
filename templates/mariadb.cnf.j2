@@ -1,0 +1,66 @@
+# MariaDB-specific config file.
+# Read by /etc/mysql/my.cnf
+
+[client]
+# Default is Latin1, if you need UTF-8 set this (also in server section)
+default-character-set = utf8
+
+[mysqld]
+#
+# * Character sets
+#
+# Default is Latin1, if you need UTF-8 set all this (also in client section)
+#
+character-set-server  = utf8
+collation-server      = utf8_general_ci
+character_set_server   = utf8
+collation_server       = utf8_general_ci
+skip-name-resolve
+innodb_file_per_table = 1
+
+##
+# Fine Tuning
+##
+max_connections         = {{ mariadb_max_connections }}
+connect_timeout         = {{ mariadb_connect_timeout }}
+wait_timeout            = {{ mariadb_wait_timeout }}
+max_allowed_packet      = {{ mariadb_max_allowed_packet }} 
+sort_buffer_size        = {{ mariadb_sort_buffer_size }}
+bulk_insert_buffer_size = {{ mariadb_bulk_insert_buffer_size }}
+tmp_table_size          = {{ mariadb_tmp_table_size }} 
+max_heap_table_size     = {{ mariadb_max_heap_table_size }}
+table_cache             = {{ mariadb_table_cache }}
+open_files_limit        = {{ mariadb_open_files_limit }}
+
+##
+# Aria
+##
+aria-pagecache-buffer-size      = {{ mariadb_aria_pagecache_buffer_size }}
+
+
+##
+# Inno db performance settings (TBD)
+##
+innodb_log_file_size            = {{ mariadb_innodb_log_file_size }}
+innodb_buffer_pool_size         = {{ mariadb_innodb_buffer_pool_size }}
+innodb_buffer_pool_instances    = {{ mariadb_innodb_buffer_pool_instances }} 
+innodb_log_buffer_size          = {{ mariadb_innodb_log_buffer_size }}
+innodb_file_per_table           = {{ mariadb_innodb_file_per_table }}
+innodb_open_files               = {{ mariadb_innodb_open_files }}
+innodb_io_capacity              = {{ mariadb_innodb_io_capacity }}
+innodb_flush_method             = {{ mariadb_innodb_flush_method }}
+
+##
+# SSD Performance configuration
+# MariaDB blog about ssd storage: https://blog.mariadb.org/how-to-tune-mariadb-write-performance/
+##
+innodb_flush_neighbors          = {{ mariadb_innodb_flush_neighbors }}
+innodb_io_capacity              = {{ mariadb_innodb_io_capacity }} 
+innodb_read_io_threads          = {{ mariadb_innodb_read_io_threads }}
+innodb_write_io_threads         = {{ mariadb_innodb_write_io_threads }}
+innodb_thread_concurrency       = {{ mariadb_innodb_thread_concurrency }}
+
+##
+# Make server available on the given address. Default is localhost
+##
+bind-address = {{ mariadb_bind_address }}
