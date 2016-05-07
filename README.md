@@ -1,38 +1,78 @@
-Role Name
+Ansible role MariaDB
 =========
 
-A brief description of the role goes here.
+Installs MariaDB 10.1 on Ubuntu Trusty
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Ansible and Ubuntu Trusty
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+This role contains a large set of variables that controls how the mariadb configuration file looks. All the defaults are listed here:
 
+```yaml
+---
+mariadb_max_connections: 100
+mariadb_connect_timeout: 5
+mariadb_wait_timeout: 600
+mariadb_max_allowed_packet: 16M
+mariadb_sort_buffer_size: 4M
+mariadb_bulk_insert_buffer_size: 16M
+mariadb_tmp_table_size: 32M
+mariadb_max_heap_table_size: 32M # should match Aria-pagecache buffer size!!
+mariadb_table_cache: 256
+mariadb_open_files_limit: 65535
+mariadb_aria_pagecache_buffer_size: 32M 
+
+# innodb general optimizations
+mariadb_innodb_log_file_size: 50M
+mariadb_innodb_buffer_pool_size: 64M
+mariadb_innodb_buffer_pool_instances: 8 #Divide the buffer pool into this many equaliy size slices - should improve concurrency handling greatly, the "high performance mysql book" states that 8 is the magic number to go with
+mariadb_innodb_log_buffer_size: 8M
+mariadb_innodb_file_per_table: 1
+mariadb_innodb_open_files: 400
+mariadb_innodb_flush_method: O_DIRECT
+
+# storage optimizations
+mariadb_innodb_flush_neighbors: 0
+# Recommendation for SSD hardware is 2K => 20K, going with a conservative low value to not overload the disk...
+mariadb_innodb_io_capacity: 1500 
+mariadb_innodb_read_io_threads: 8
+mariadb_innodb_write_io_threads: 8
+# Let Innodb control the thread concurrency and query ticket numbers.
+mariadb_innodb_thread_concurrency: 0 
+
+mariadb_bind_address: 127.0.0.1 
+```
+
+Most likely the `mariadb_bind_address` should be updated. For performance loptimizations look into changing `mariadb_innodb_io_capacity` and `mariadb_innodb_buffer_pool_size`.
+ 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+No dependencies 
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+You can use the role like this
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+
+- hosts: servers
+  roles:
+      - { role: nover.mariadb }
+  vars_files:
+      - vars/mariadb.yml
+
+```
+
+Where `vars/mariadb.yml` should contain your variable overrides to fit your needs.
 
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+GitHub The Unlicense
